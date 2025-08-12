@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wedstrijduitslagen</title>
+    <style>
+        /* Modern lettertype voor de hele pagina */
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        /* Algemene styling voor de tabel */
+        .uitslagen-tabel, .uitslagen-tabel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: auto;
+        }
+
+        /* Styling voor de kop van de tabel */
+        .uitslagen-tabel thead th {
+            background-color: #004d99;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Styling voor de rijen en cellen */
+        .uitslagen-tabel tbody tr {
+            border-bottom: 1px solid #dddddd;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Wisselende achtergrondkleur voor de rijen */
+        .uitslagen-tabel tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        /* Hover-effect voor de rijen */
+        .uitslagen-tabel tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Styling voor de data-cellen */
+        .uitslagen-tabel td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* Kolommen met namen links uitlijnen en logo's centreren */
+        .uitslagen-tabel td:nth-child(5),
+        .uitslagen-tabel td:nth-child(7) {
+            text-align: left;
+        }
+        .uitslagen-tabel th:nth-child(6),
+        .uitslagen-tabel td:nth-child(6) {
+            text-align: center;
+        }
+        .uitslagen-tabel th:nth-child(8),
+        .uitslagen-tabel td:nth-child(8) {
+            text-align: center;
+        }
+
+        /* Styling voor de logo's */
+        .uitslagen-tabel img {
+            max-height: 25px;
+        }
+
+        /* Styling voor de melding wanneer er geen resultaten zijn */
+        .geen-resultaten-melding {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+            background-color: #e0f7fa;
+            border-radius: 8px;
+            border-left: 5px solid #004d99;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div
+        class="uitslagen-tabel"
+        data-article="uitslagen"
+        data-param-gebruiklokaleteamgegevens="NEE"
+        data-param-thuis="JA"
+        data-param-uit="JA"
+        data-format-wedstrijddatum="l"
+        data-fields="datumopgemaakt,aanvangstijd,thuisteam,thuisteamlogo,uitteam,uitteamlogo,uitslag,competitiesoort"
+    ></div>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://dexels.github.io/navajofeeds-json-parser/js/dist/feed-0.0.1.js"></script>
+    <script>
+        // Functie die de styling en afbeeldingen toepast
+        function applyCustomStyling() {
+            var $uitslagenTabel = $('.uitslagen-tabel');
+            
+            // Logo's van thuisteam en uitteam als afbeeldingen tonen
+            $uitslagenTabel.find('td:nth-child(6), td:nth-child(8)').each(function() {
+                var $logoCell = $(this);
+                var logoUrl = $logoCell.text().trim();
+                if (logoUrl && logoUrl.startsWith('http')) {
+                    $logoCell.html('<img src="' + logoUrl + '" alt="logo" />');
+                }
+            });
+        }
+    
+        // De MutationObserver om te wachten tot de tabel volledig is geladen
+        var targetNode = document.querySelector('.uitslagen-tabel');
+        if (targetNode) {
+            var config = { childList: true, subtree: true };
+            var observer = new MutationObserver(function(mutationsList) {
+                observer.disconnect();
+
+                var uitslagenData = $(".uitslagen-tabel table");
+                if (uitslagenData.length === 0) {
+                    $('.uitslagen-tabel').html('<div class="geen-resultaten-melding">Er zijn geen uitslagen gevonden.</div>');
+                } else {
+                    applyCustomStyling();
+                }
+            });
+
+            observer.observe(targetNode, config);
+        }
+
+        // Initieer het feed-script
+        feed.init({
+            clientId: "MrtO0GzSyX"
+        });
+    </script>
+</body>
+</html>
