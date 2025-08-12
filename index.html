@@ -166,4 +166,61 @@
         });
     </script>
 </body>
+
+    <body>
+
+    <div
+        class="poule-tabel"
+        data-article="poulestand"
+        data-param-poulecode="791339" 
+        data-param-gebruiklokaleteamgegevens="NEE"
+        data-fields="positie,clublogo,teamnaam,punten,doelsaldo,gespeeldewedstrijden,gewonnen,gelijk,verloren,doelpuntenvoor,doelpuntentegen"
+    ></div>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://dexels.github.io/navajofeeds-json-parser/js/dist/feed-0.0.1.js"></script>
+    <script>
+        // Functie die de styling en afbeeldingen toepast
+        function applyCustomStyling() {
+            var $pouleTabel = $('.poule-tabel');
+            
+            // Logo's als afbeeldingen tonen
+            $pouleTabel.find('td:nth-child(2)').each(function() {
+                var $logoCell = $(this);
+                var logoUrl = $logoCell.text().trim();
+                if (logoUrl && logoUrl.startsWith('http')) {
+                    $logoCell.html('<img src="' + logoUrl + '" alt="logo" />');
+                }
+            });
+        }
+    
+        // De MutationObserver om te wachten tot de tabel volledig is geladen
+        var targetNode = document.querySelector('.poule-tabel');
+        if (targetNode) {
+            var config = { childList: true, subtree: true };
+            var observer = new MutationObserver(function(mutationsList) {
+                // De observer stoppen zodra de tabel geladen is om eindeloze loops te voorkomen
+                observer.disconnect();
+
+                // Toon de melding indien er geen resultaten zijn
+                var pouleData = $(".poule-tabel table");
+                if (pouleData.length === 0) {
+                    $('.poule-tabel').html('<div class="geen-resultaten-melding">Er zijn geen resultaten gevonden.</div>');
+                } else {
+                    // De styling en afbeeldingen toepassen
+                    applyCustomStyling();
+                }
+            });
+
+            // Begin met observeren
+            observer.observe(targetNode, config);
+        }
+
+        // Initieer het feed-script
+        feed.init({
+            clientId: "MrtO0GzSyX"
+        });
+    </script>
+</body>
+
 </html>
