@@ -7,13 +7,22 @@
         body {
             font-family: 'Roboto', 'Arial', sans-serif;
             background-color: #f4f4f9;
-            padding: 20px; /* Meer ruimte rondom de tabel */
-            font-size: 20px; /* Groter lettertype voor goede leesbaarheid op afstand */
+            padding: 2.5vw; /* Schaalbare padding */
+            font-size: 2.5vw; /* Schaalbare lettergrootte */
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #004d99;
+            margin-top: 0;
+            margin-bottom: 1.5vw;
+            font-size: 3vw;
         }
         .poule-tabel, .poule-tabel table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px auto;
+            margin: 1vw auto; /* Schaalbare margin */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
             border-radius: 8px;
@@ -25,7 +34,7 @@
             color: #ffffff;
             font-weight: bold;
             text-align: center;
-            padding: 20px 16px; /* Meer padding voor grotere tekst */
+            padding: 1vw 0.8vw; /* Schaalbare padding */
             letter-spacing: 0.5px;
         }
         .poule-tabel tbody tr {
@@ -39,22 +48,22 @@
             background-color: #f1f1f1;
         }
         .poule-tabel td {
-            padding: 20px 16px; /* Meer padding voor grotere tekst */
+            padding: 1vw 0.8vw; /* Schaalbare padding */
             vertical-align: middle;
             text-align: center;
         }
         .poule-tabel td:nth-child(3) {
             text-align: left;
-            min-width: 150px; /* Bredere kolom voor teamnaam */
+            min-width: 20vw; /* Schaalbare breedte teamnaam */
             font-weight: bold;
         }
         .poule-tabel td:first-child,
         .poule-tabel td:nth-child(2) {
-            width: 35px;
+            width: 4vw; /* Schaalbare breedte */
             font-weight: bold;
         }
         .poule-tabel img {
-            max-height: 30px; /* Grotere logo's */
+            max-height: 4vh; /* Schaalbare logo-hoogte */
         }
         .poule-tabel th:last-child,
         .poule-tabel td:last-child {
@@ -66,25 +75,27 @@
             font-weight: bold !important;
         }
         .geen-resultaten-melding {
-            padding: 20px;
+            padding: 2vw;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.5vw;
             color: #555;
             background-color: #e0f7fa;
             border-radius: 8px;
             border-left: 5px solid #004d99;
-            margin: 20px auto;
+            margin: 2vw auto;
         }
     </style>
 </head>
 <body>
-   <h2>Stand Competitie SV Vasse 1</h2>
+    
+    <h2>Stand Competitie SV Vasse 1</h2>
     <div class="poule-tabel"
         data-article="poulestand"
         data-param-poulecode="788573"
         data-param-gebruiklokaleteamgegevens="NEE"
         data-fields="positie,clublogo,teamnaam,punten,doelsaldo,gespeeldewedstrijden,gewonnen,gelijk,verloren,doelpuntenvoor,doelpuntentegen,eigenteam"
     ></div>
+
     <h2>Stand Beker SV Vasse 1</h2>
     <div class="poule-tabel"
         data-article="poulestand"
@@ -92,6 +103,7 @@
         data-param-gebruiklokaleteamgegevens="NEE"
         data-fields="positie,clublogo,teamnaam,punten,doelsaldo,gespeeldewedstrijden,gewonnen,gelijk,verloren,doelpuntenvoor,doelpuntentegen"
     ></div>
+
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://dexels.github.io/navajofeeds-json-parser/js/dist/feed-0.0.1.js"></script>
     <script>
