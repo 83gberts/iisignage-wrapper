@@ -2,21 +2,32 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>KNVB Poulestand</title>
+    <title>KNVB Poulestand en Uitslagen</title>
     <style>
-        /* Modern lettertype voor de hele pagina */
+        /* Basisstijl voor de hele pagina */
         body {
             font-family: 'Roboto', 'Arial', sans-serif;
             background-color: #f4f4f9;
-            padding: 20px;
-            font-size: 36px;
+            padding: 2.5vw;
+            font-size: 2.5vw;
+            margin: 0;
         }
 
-        /* Algemene styling voor de tabel */
-        .poule-tabel, .poule-tabel table {
+        /* Stijl voor hoofdtitels */
+        h2 {
+            text-align: center;
+            color: #004d99;
+            margin-top: 0;
+            margin-bottom: 1.5vw;
+            font-size: 3vw;
+        }
+
+        /* Algemene tabelstijlen voor beide tabellen */
+        .poule-tabel, .poule-tabel table,
+        .uitslagen-tabel, .uitslagen-tabel table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px auto;
+            margin: 1vw auto;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
             border-radius: 8px;
@@ -24,70 +35,184 @@
             table-layout: auto;
         }
 
-        /* Styling voor de kop van de tabel */
-        .poule-tabel thead th {
+        /* Kop van de tabellen */
+        .poule-tabel thead th,
+        .uitslagen-tabel thead th {
             background-color: #004d99;
             color: #ffffff;
             font-weight: bold;
             text-align: center;
-            padding: 10px 8px;
+            padding: 1vw 0.8vw;
             letter-spacing: 0.5px;
         }
 
-        /* Styling voor de rijen en cellen */
-        .poule-tabel tbody tr {
+        /* Rij- en celstijlen */
+        .poule-tabel tbody tr,
+        .uitslagen-tabel tbody tr {
             border-bottom: 1px solid #dddddd;
             transition: background-color 0.2s ease;
         }
 
-        /* Wisselende achtergrondkleur voor de rijen */
-        .poule-tabel tbody tr:nth-of-type(even) {
+        .poule-tabel tbody tr:nth-of-type(even),
+        .uitslagen-tabel tbody tr:nth-of-type(even) {
             background-color: #f3f3f3;
         }
 
-        /* Hover-effect voor de rijen */
-        .poule-tabel tbody tr:hover {
+        .poule-tabel tbody tr:hover,
+        .uitslagen-tabel tbody tr:hover {
             background-color: #f1f1f1;
         }
 
-        /* Styling voor de data-cellen */
-        .poule-tabel td {
-            padding: 10px 8px;
+        .poule-tabel td,
+        .uitslagen-tabel td {
+            padding: 1vw 0.8vw;
             vertical-align: middle;
             text-align: center;
         }
 
-        /* De teamnaam kolom links uitlijnen en breder maken */
+        /* Specifieke kolomstijlen poule-tabel */
         .poule-tabel td:nth-child(3) {
             text-align: left;
-            min-width: 180px;
+            min-width: 20vw;
             font-weight: bold;
         }
-
-        /* De positie en logo kolommen klein houden */
         .poule-tabel td:first-child,
         .poule-tabel td:nth-child(2) {
-            width: 40px;
+            width: 4vw;
             font-weight: bold;
         }
-
-        /* Styling voor het logo */
-        .poule-tabel img {
-            max-height: 25px;
+        .poule-tabel th:last-child,
+        .poule-tabel td:last-child {
+            display: none;
+        }
+        .eigen-team-highlight {
+            background-color: #ffeb3b !important;
+            color: #333 !important;
+            font-weight: bold !important;
         }
 
-        /* Styling voor de melding wanneer er geen resultaten zijn */
-        .geen-resultaten-melding {
-            padding: 20px;
+        /* Specifieke kolomstijlen uitslagen-tabel */
+        .uitslagen-tabel td:nth-child(3),
+        .uitslagen-tabel td:nth-child(5) {
+            text-align: left;
+            min-width: 20vw;
+            font-weight: bold;
+        }
+        .uitslagen-tabel td:nth-child(4),
+        .uitslagen-tabel td:nth-child(6) {
             text-align: center;
-            font-size: 1.2em;
+        }
+
+        /* Logo-stijl */
+        .poule-tabel img, .uitslagen-tabel img {
+            max-height: 4vh;
+        }
+
+        /* Stijl voor de melding geen resultaten */
+        .geen-resultaten-melding {
+            padding: 2vw;
+            text-align: center;
+            font-size: 1.5vw;
             color: #555;
             background-color: #e0f7fa;
             border-radius: 8px;
             border-left: 5px solid #004d99;
-            margin: 20px auto;
+            margin: 2vw auto;
         }
     </style>
 </head>
-  
+<body>
+
+    <h2>Stand KNVB</h2>
+    <div class="poule-tabel"
+        data-article="poulestand"
+        data-param-poulecode="791339"
+        data-param-gebruiklokaleteamgegevens="NEE"
+        data-fields="positie,clublogo,teamnaam,punten,doelsaldo,gespeeldewedstrijden"
+    ></div>
+
+    <hr>
+    
+    <h2>Wedstrijduitslagen</h2>
+    <div class="uitslagen-tabel"
+        data-article="uitslagen"
+        data-param-teamcode="160819"
+        data-param-weekoffset="-3"
+        data-param-aantaldagen="28"
+        data-param-gebruiklokaleteamgegevens="NEE"
+        data-param-sorteervolgorde="datum"
+        data-param-competitiesoort="beker"
+        data-fields="datum,thuisteam,thuisteamlogo,uitteam,uitteamlogo,uitslag"
+    ></div>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://dexels.github.io/navajofeeds-json-parser/js/dist/feed-0.0.1.js"></script>
+    <script>
+        function applyPouleStyling(pouleTable) {
+            var $pouleTabel = $(pouleTable);
+            var pouleData = $pouleTabel.find("table");
+            if (pouleData.length === 0) {
+                $pouleTabel.html('<div class="geen-resultaten-melding">Er zijn geen resultaten gevonden.</div>');
+            } else {
+                pouleData.find('td:nth-child(2)').each(function() {
+                    var $logoCell = $(this);
+                    var logoUrl = $logoCell.text().trim();
+                    if (logoUrl && logoUrl.startsWith('http')) {
+                        $logoCell.html('<img src="' + logoUrl + '" alt="logo" />');
+                    }
+                });
+                pouleData.find('tr').each(function() {
+                    var $row = $(this);
+                    var eigenTeamCell = $row.find('td:last');
+                    if (eigenTeamCell.length && eigenTeamCell.text().trim().toUpperCase() === 'JA') {
+                        $row.addClass('eigen-team-highlight');
+                    }
+                });
+            }
+        }
+
+        function applyUitslagenStyling(uitslagenTable) {
+            var $uitslagenTabel = $(uitslagenTable);
+            var uitslagenData = $uitslagenTabel.find("table");
+            if (uitslagenData.length === 0) {
+                $uitslagenTabel.html('<div class="geen-resultaten-melding">Er zijn geen uitslagen gevonden.</div>');
+            } else {
+                uitslagenData.find('td:nth-child(4), td:nth-child(6)').each(function() {
+                    var $logoCell = $(this);
+                    var logoUrl = $logoCell.text().trim();
+                    if (logoUrl && logoUrl.startsWith('http')) {
+                        $logoCell.html('<img src="' + logoUrl + '" alt="logo" />');
+                    }
+                });
+            }
+        }
+
+        document.querySelectorAll('.poule-tabel').forEach(function(targetNode) {
+            var observer = new MutationObserver(function(mutationsList) {
+                if (targetNode.querySelector('table')) {
+                    observer.disconnect();
+                    applyPouleStyling(targetNode);
+                }
+            });
+            var config = { childList: true, subtree: true };
+            observer.observe(targetNode, config);
+        });
+
+        document.querySelectorAll('.uitslagen-tabel').forEach(function(targetNode) {
+            var observer = new MutationObserver(function(mutationsList) {
+                if (targetNode.querySelector('table')) {
+                    observer.disconnect();
+                    applyUitslagenStyling(targetNode);
+                }
+            });
+            var config = { childList: true, subtree: true };
+            observer.observe(targetNode, config);
+        });
+
+        feed.init({
+            clientId: "MrtO0GzSyX"
+        });
+    </script>
+</body>
+</html>
 </html>
