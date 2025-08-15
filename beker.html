@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>KNVB Poulestand</title>
+    <style>
+        /* Modern lettertype voor de hele pagina */
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            font-size: 36px;
+        }
+
+        /* Algemene styling voor de tabel */
+        .poule-tabel, .poule-tabel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: auto;
+        }
+
+        /* Styling voor de kop van de tabel */
+        .poule-tabel thead th {
+            background-color: #004d99;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Styling voor de rijen en cellen */
+        .poule-tabel tbody tr {
+            border-bottom: 1px solid #dddddd;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Wisselende achtergrondkleur voor de rijen */
+        .poule-tabel tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        /* Hover-effect voor de rijen */
+        .poule-tabel tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Styling voor de data-cellen */
+        .poule-tabel td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* De teamnaam kolom links uitlijnen en breder maken */
+        .poule-tabel td:nth-child(3) {
+            text-align: left;
+            min-width: 180px;
+            font-weight: bold;
+        }
+
+        /* De positie en logo kolommen klein houden */
+        .poule-tabel td:first-child,
+        .poule-tabel td:nth-child(2) {
+            width: 40px;
+            font-weight: bold;
+        }
+
+        /* Styling voor het logo */
+        .poule-tabel img {
+            max-height: 25px;
+        }
+
+        /* Styling voor de melding wanneer er geen resultaten zijn */
+        .geen-resultaten-melding {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+            background-color: #e0f7fa;
+            border-radius: 8px;
+            border-left: 5px solid #004d99;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div
+        class="poule-tabel"
+        data-article="poulestand"
+        data-param-poulecode="791339" 
+        data-param-gebruiklokaleteamgegevens="NEE"
+        data-fields="positie,clublogo,teamnaam,punten,doelsaldo,gespeeldewedstrijden,gewonnen"
+    ></div>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://dexels.github.io/navajofeeds-json-parser/js/dist/feed-0.0.1.js"></script>
+    <script>
+        // Functie die de styling en afbeeldingen toepast
+        function applyCustomStyling() {
+            var $pouleTabel = $('.poule-tabel');
+            
+            // Logo's als afbeeldingen tonen
+            $pouleTabel.find('td:nth-child(2)').each(function() {
+                var $logoCell = $(this);
+                var logoUrl = $logoCell.text().trim();
+                if (logoUrl && logoUrl.startsWith('http')) {
+                    $logoCell.html('<img src="' + logoUrl + '" alt="logo" />');
+                }
+            });
+        }
+    
+        // De MutationObserver om te wachten tot de tabel volledig is geladen
+        var targetNode = document.querySelector('.poule-tabel');
+        if (targetNode) {
+            var config = { childList: true, subtree: true };
+            var observer = new MutationObserver(function(mutationsList) {
+                // De observer stoppen zodra de tabel geladen is om eindeloze loops te voorkomen
+                observer.disconnect();
+
+                // Toon de melding indien er geen resultaten zijn
+                var pouleData = $(".poule-tabel table");
+                if (pouleData.length === 0) {
+                    $('.poule-tabel').html('<div class="geen-resultaten-melding">Er zijn geen resultaten gevonden.</div>');
+                } else {
+                    // De styling en afbeeldingen toepassen
+                    applyCustomStyling();
+                }
+            });
+
+            // Begin met observeren
+            observer.observe(targetNode, config);
+        }
+
+        // Initieer het feed-script
+        feed.init({
+            clientId: "MrtO0GzSyX"
+        });
+    </script>
+</body>
+</html>
