@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wedstrijdprogramma</title>
+    <style>
+        /* Modern lettertype voor de hele pagina */
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            font-size: 28px;
+        }
+
+        /* Algemene styling voor de tabel */
+        .programma-tabel, .programma-tabel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: auto;
+        }
+
+        /* Styling voor de kop van de tabel */
+        .programma-tabel thead th {
+            background-color: #004d99;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Styling voor de rijen en cellen */
+        .programma-tabel tbody tr {
+            border-bottom: 1px solid #dddddd;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Wisselende achtergrondkleur voor de rijen */
+        .programma-tabel tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        /* Hover-effect voor de rijen */
+        .programma-tabel tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Styling voor de data-cellen */
+        .programma-tabel td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* Kolommen met namen links uitlijnen en logo's centreren */
+        .programma-tabel td:nth-child(1),
+        .programma-tabel td:nth-child(3) {
+            text-align: left;
+        }
+
+        /* Styling voor de logo-kolommen */
+        .programma-tabel th:nth-child(2),
+        .programma-tabel td:nth-child(2),
+        .programma-tabel th:nth-child(4),
+        .programma-tabel td:nth-child(4) {
+            text-align: center;
+        }
+
+        /* Styling voor de logo's */
+        .programma-tabel img {
+            max-height: 25px;
+        }
+
+        /* Styling voor de melding wanneer er geen resultaten zijn */
+        .geen-resultaten-melding {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+            background-color: #e0f7fa;
+            border-radius: 8px;
+            border-left: 5px solid #004d99;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div
+        class="programma-tabel"
+        data-article="programma"
+        data-param-gebruiklokaleteamgegevens="NEE"
+        data-param-eigenwedstrijden="JA"
+        data-param-thuis="JA"
+        data-param-uit="JA"
+        data-fields="thuisteam,uitteam,competitiesoort,kaledatum,aanvangstijd,veld,kleedkamerthuisteam,kleedkameruitteam,kleedkamerscheidsrechter"
+    ></div>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://dexels.github.io/navajofeeds-json-parser/js/dist/feed-0.0.1.js"></script>
+    <script>
+        // Functie die de styling en afbeeldingen toepast
+        function applyCustomStyling() {
+            var $programmaTabel = $('.programma-tabel');
+            
+            // Logo's van thuisteam en uitteam als afbeeldingen tonen
+            $programmaTabel.find('td:nth-child(2), td:nth-child(4)').each(function() {
+                var $logoCell = $(this);
+                var logoUrl = $logoCell.text().trim();
+                if (logoUrl && logoUrl.startsWith('http')) {
+                    $logoCell.html('<img src="' + logoUrl + '" alt="logo" />');
+                }
+            });
+
+            // Wijzig de kolomtitels en formatteer de datum
+            $programmaTabel.find('th:contains("Kaledatum")').text('Datum');
+            $programmaTabel.find('th:contains("Kleedkamerthuisteam")').text('Kl.k. thuis');
+            $programmaTabel.find('th:contains("Kleedkameruitteam")').text('Kl.k. uit');
+            $programmaTabel.find('th:contains("Kleedkamerscheidsrechter")').text('Kl.k. scheids');
+
+            // Format de datum dd-mm-jjjj
+            $programmaTabel.find('th:contains("Datum")').each(function() {
+                var datumKolomIndex = $(this).index();
+                $programmaTabel.find('tbody tr').each(function() {
+                    var datumCel = $(this).find('td').eq(datumKolomIndex);
+                    var datumTijd = datumCel.text();
+                    var datum = datumTijd.split(' ')[0]; // Splits op spatie om de datum te isoleren
+                    datumCel.text(datum);
+                });
+            });
+        }
+    
+        // De MutationObserver om te wachten tot de tabel volledig is geladen
+        var targetNode = document.querySelector('.programma-tabel');
+        if (targetNode) {
+            var config = { childList: true, subtree: true };
+            var observer = new MutationObserver(function(mutationsList) {
+                observer.disconnect();
+
+                var programmaData = $(".programma-tabel table");
+                if (programmaData.length === 0) {
+                    $('.programma-tabel').html('<div class="geen-resultaten-melding">Er zijn geen wedstrijden gevonden.</div>');
+                } else {
+                    applyCustomStyling();
+                }
+            });
+
+            observer.observe(targetNode, config);
+        }
+
+        // Initieer het feed-script
+        feed.init({
+            clientId: "1a2Hh4IL8X"
+        });
+    </script>
+</body>
+</html>
